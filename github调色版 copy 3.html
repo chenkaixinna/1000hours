@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌲 1000 Hours</title>
+    <link rel="apple-touch-icon" href="logo2.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="1000 Hours">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&family=Raleway:wght@600&display=swap');
+
+        :root {
+          --salmon: #F79F77;
+          --light-blue: #80BEF5;
+          --pale-yellow: #F6D58A;
+          --black: #010101;
+          --white: #FFFFFF;
+          --light-gray: #F5F5F5;
+        }
+
+        body {
+          font-family: 'Raleway', sans-serif;
+          color: var(--black);
+          line-height: 1.6;
+          padding: 20px;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          background-color: var(--white);
+        }
+
+        .container {
+          max-width: 100%;
+          margin: 0 auto;
+          background: var(--white);
+          border-radius: 20px;
+          padding: 25px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+          font-size: 40px;
+          color: var(--primary);
+          text-align: center;
+          margin-bottom: 1.5rem;
+          font-weight: 700;
+        }
+
+        .overall-progress-bar {
+          height: 18px;
+          background: var(--light-gray);
+          border-radius: 6px;
+          overflow: hidden;
+          margin-bottom: 1.5rem;
+          position: relative;
+        }
+
+        .overall-progress {
+          height: 100%;
+          background: linear-gradient(45deg, var(--salmon), var(--light-blue), var(--pale-yellow));
+          transition: width 0.3s ease;
+        }
+
+        .overall-progress-text {
+          position: absolute;
+          width: 100%;
+          top: 0;
+          left: 0;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 10px;
+          color: var(--text);
+          font-weight: 600;
+        }
+
+        .search-bar,
+        .input-group input {
+          width: calc(100% - 2rem);
+          padding: 12px 15px;
+          border: 2px solid var(--light-blue);
+          border-radius: 10px;
+          font-size: 16px;
+          margin-bottom: 15px;
+          transition: all 0.3s ease;
+          -webkit-appearance: none;
+          appearance: none;
+        }
+
+        .search-bar:focus,
+        .input-group input:focus {
+          outline: none;
+          border-color: var(--salmon);
+          box-shadow: 0 0 0 3px rgba(247, 159, 119, 0.2);
+        }
+
+        .input-group {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 15px;
+        }
+
+        .input-group input {
+          margin-bottom: 15px;
+        }
+
+        button, .small-button {
+          background: var(--black);
+          color: var(--white);
+          border: none;
+          padding: 12px 20px;
+          border-radius: 10px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        button:hover, .small-button:hover {
+          background: var(--salmon);
+          transform: translateY(-2px);
+        }
+
+        button:active, .small-button:active {
+          transform: translateY(1px);
+        }
+
+        #csvInput {
+          display: none;
+        }
+
+        .task {
+          background: var(--light-gray);
+          border: 1.5px solid var(--secondary);
+          border-radius: 15px;
+          padding: 20px;
+          margin-bottom: 20px;
+          transition: all 0.3s ease;
+        }
+
+        .task:hover {
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 15px;
+        }
+
+        .task-title {
+          font-size: 20px;
+          font-weight: 600;
+          color: var(--black);
+          cursor: pointer;
+        }
+
+        .progress-bar {
+          position: relative;
+          height: 16px;
+          background: var(--secondary);
+          border-radius: 8px;
+          overflow: hidden;
+          margin: 15px 0;
+        }
+
+        .progress {
+          height: 100%;
+          background: linear-gradient(45deg, var(--salmon), var(--light-blue), var(--pale-yellow));
+          transition: width 0.3s ease;
+        }
+
+        .progress-text {
+          position: absolute;
+          width: 100%;
+          top: 0;
+          left: 0;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 10px;
+          color: var(--black);
+          font-weight: 600;
+        }
+
+
+        .task-buttons button {
+          background: var(--salmon);
+          color: var(--white);
+          padding: 8px 12px;
+          font-size: 14px;
+        }
+
+        .task-buttons button:hover {
+          background: var(--salmon);
+        }
+
+        .task-buttons, .time-buttons, .increment-buttons {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+
+        .task-buttons button, .time-buttons button, .increment-buttons button {
+          padding: 8px 12px;
+          font-size: 12px;
+          flex: 1;
+          min-width: 70px;
+        }
+
+        .time-spent {
+          font-size: 12px;
+          color: var(--text);
+          margin-bottom: 10px;
+        }
+
+        .edit-form {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-top: 15px;
+        }
+
+        .button-group {
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          margin-top: 20px;
+        }
+
+
+        .button-group button {
+          background: var(--pale-yellow);
+          color: var(--black);
+        }
+
+        @media (max-width: 480px) {
+          body {
+            padding: 10px;
+          }
+
+          .container {
+            padding: 20px;
+          }
+
+          h1 {
+            font-size: 24px;
+          }
+
+          .search-bar,
+          .input-group input,
+          button,
+          .small-button {
+            font-size: 16px;
+            padding: 10px 15px;
+          }
+
+          .task-title {
+            font-size: 16px;
+          }
+
+          .task-buttons, .time-buttons, .increment-buttons {
+            justify-content: space-between;
+          }
+
+          .task-buttons button, .time-buttons button, .increment-buttons button {
+            padding: 8px 10px;
+            font-size: 12px;
+          }
+        }
+        .weekly-progress-bar {
+            height: 18px;
+            background: var(--light-gray);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .weekly-progress {
+            height: 100%;
+            background: linear-gradient(45deg, var(--light-blue), var(--pale-yellow));
+            transition: width 0.3s ease;
+        }
+
+        .weekly-progress-text {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            color: var(--text);
+            font-weight: 600;
+        }
+        #congratsMessage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="congratsMessage" role="alert"></div>
+    <div class="container">
+        <h1>🌲 1000 Hours</h1>
+        <div class="overall-progress-bar">
+            <div class="overall-progress" id="overallProgress"></div>
+            <div class="overall-progress-text" id="overallProgressText">0/1000</div>
+        </div>
+        <div class="weekly-progress-bar">
+            <div class="weekly-progress" id="weeklyProgress"></div>
+            <div class="weekly-progress-text" id="weeklyProgressText">0/21</div>
+        </div>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search tasks...">
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="Enter a new task">
+            <input type="number" id="taskGoal" placeholder="Task goal">
+            <button id="addTask">Add</button>
+        </div>
+        <div id="taskList"></div>
+        <div class="button-group">
+            <label for="csvInput" id="csvLabel" class="small-button">Import</label>
+            <input type="file" id="csvInput" accept=".xlsx">
+            <button onclick="exportXLSX()" class="small-button">Export</button>
+            <button onclick="clearStorage()" class="small-button">Clear</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        const goal = 1000 * 60; // 1000 hours in minutes
+        const weeklyGoal = 21 * 60; // 21 hours in minutes
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let weeklyProgress = JSON.parse(localStorage.getItem('weeklyProgress')) || { startDate: null, minutes: 0 };
+        let lastWeeklyCongrats = JSON.parse(localStorage.getItem('lastWeeklyCongrats')) || null;
+        let lastCelebratedMilestone = parseInt(localStorage.getItem('lastCelebratedMilestone')) || 0;
+        const taskInput = document.getElementById('taskInput');
+        const taskGoal = document.getElementById('taskGoal');
+        const addTaskButton = document.getElementById('addTask');
+        const taskList = document.getElementById('taskList');
+        const csvInput = document.getElementById('csvInput');
+        const overallProgress = document.getElementById('overallProgress');
+        const overallProgressText = document.getElementById('overallProgressText');
+        const weeklyProgressBar = document.getElementById('weeklyProgress');
+        const weeklyProgressText = document.getElementById('weeklyProgressText');
+        const searchInput = document.getElementById('searchInput');
+        const congratsMessage = document.getElementById('congratsMessage');
+
+        function clearStorage() {
+            localStorage.removeItem('tasks');
+            localStorage.removeItem('weeklyProgress');
+            localStorage.removeItem('lastCelebratedMilestone');
+            localStorage.removeItem('lastWeeklyCongrats');
+            tasks = [];
+            weeklyProgress = { startDate: null, minutes: 0 };
+            lastCelebratedMilestone = 0;
+            lastWeeklyCongrats = null;
+            renderTasks();
+        }
+
+        function shouldResetWeeklyProgress(currentDate, lastResetDate) {
+            if (!lastResetDate) return true;
+            
+            const lastResetDay = new Date(lastResetDate).getDay();
+            const currentDay = currentDate.getDay();
+            
+            // If it's Monday (1) and the last reset wasn't on a Monday, or if more than 7 days have passed
+            return (currentDay === 1 && lastResetDay !== 1) || 
+                   (currentDate - new Date(lastResetDate) > 7 * 24 * 60 * 60 * 1000);
+        }
+
+        function updateOverallProgress() {
+            const totalMinutes = tasks.reduce((sum, task) => sum + task.timeSpent, 0);
+            const progressPercentage = Math.min((totalMinutes / goal) * 100, 100);
+            overallProgress.style.width = progressPercentage + '%';
+            overallProgressText.textContent = `${Math.floor(totalMinutes / 60)}/${goal / 60}`;
+            
+            // Check for milestones
+            const hours = Math.floor(totalMinutes / 60);
+            const milestone = Math.floor(hours / 10) * 10;
+            if (milestone > lastCelebratedMilestone) {
+                showCongratulation(milestone);
+                lastCelebratedMilestone = milestone;
+                localStorage.setItem('lastCelebratedMilestone', lastCelebratedMilestone);
+            }
+        }
+
+        function showCongratulation(hours) {
+            congratsMessage.textContent = `Congratulations! You've reached ${hours} hours!`;
+            congratsMessage.style.display = 'block';
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            setTimeout(() => {
+                congratsMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function updateWeeklyProgress() {
+            const now = new Date();
+            if (shouldResetWeeklyProgress(now, weeklyProgress.startDate)) {
+                resetWeeklyProgress(now);
+            }
+            const progressPercentage = Math.min((weeklyProgress.minutes / weeklyGoal) * 100, 100);
+            weeklyProgressBar.style.width = progressPercentage + '%';
+            weeklyProgressText.textContent = `${Math.floor(weeklyProgress.minutes / 60)}/${weeklyGoal / 60}`;
+            localStorage.setItem('weeklyProgress', JSON.stringify(weeklyProgress));
+
+            // Check if weekly goal is achieved and congratulation hasn't been shown this week
+            if (weeklyProgress.minutes >= weeklyGoal && (!lastWeeklyCongrats || shouldResetWeeklyProgress(now, lastWeeklyCongrats))) {
+                showWeeklyGoalAchieved();
+                lastWeeklyCongrats = now.toISOString();
+                localStorage.setItem('lastWeeklyCongrats', JSON.stringify(lastWeeklyCongrats));
+            }
+        }
+
+        function resetWeeklyProgress(now) {
+            const monday = new Date(now);
+            monday.setDate(now.getDate() - now.getDay() + 1); // Set to Monday
+            monday.setHours(0, 0, 0, 0); // Set to 00:00:00
+
+            weeklyProgress = { startDate: monday.toISOString(), minutes: 0 };
+            lastWeeklyCongrats = null;
+            localStorage.setItem('weeklyProgress', JSON.stringify(weeklyProgress));
+            localStorage.setItem('lastWeeklyCongrats', JSON.stringify(lastWeeklyCongrats));
+        }
+
+        function showWeeklyGoalAchieved() {
+            congratsMessage.textContent = "Congratulations! You've achieved your weekly goal of 21 hours!";
+            congratsMessage.style.display = 'block';
+            confetti({
+                particleCount: 200,
+                spread: 90,
+                origin: { y: 0.6 }
+            });
+            setTimeout(() => {
+                congratsMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function renderTasks() {
+            const searchQuery = searchInput.value.toLowerCase();
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                if (task.name.toLowerCase().includes(searchQuery)) {
+                    const progressPercentage = task.goal > 0 ? (task.progress / task.goal) * 100 : 0;
+                    const taskElement = document.createElement('div');
+                    taskElement.className = 'task';
+                    taskElement.innerHTML = `
+                        <div class="task-header">
+                            <span class="task-title">${task.name}</span>
+                            <div class="task-buttons">
+                                <button onclick="toggleEditForm(${index})">Edit</button>
+                                <button onclick="deleteTask(${index})">Delete</button>
+                            </div>
+                        </div>
+                        <p>${task.timeSpent} minutes</p>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${progressPercentage}%"></div>
+                            <div class="progress-text">${task.progress}/${task.goal}</div>
+                        </div>
+                        <div class="increment-buttons">
+                            <button class="small-button" onclick="incrementTime(${index}, 1)">+1 Min</button>
+                            <button class="small-button" onclick="incrementTime(${index}, 5)">+5 Min</button>
+                            <button class="small-button" onclick="incrementTime(${index}, 10)">+10 Min</button>
+                            <button class="small-button" onclick="incrementProgress(${index})">+1 Prog</button>
+                        </div>
+                        <div class="edit-form" id="editForm${index}" style="display: none;">
+                            <input type="text" id="editName${index}" value="${task.name}">
+                            <input type="number" id="editGoal${index}" value="${task.goal}">
+                            <input type="number" id="editProgress${index}" value="${task.progress}">
+                            <input type="number" id="editTime${index}" value="${task.timeSpent}">
+                            <button class="small-button" onclick="saveEdit(${index})">Save</button>
+                        </div>
+                    `;
+                    taskList.appendChild(taskElement);
+                }
+            });
+            updateOverallProgress();
+            updateWeeklyProgress();
+        }
+
+
+        function addTask() {
+            const name = taskInput.value.trim();
+            const goal = parseInt(taskGoal.value) || 0;
+            if (name) {
+                tasks.unshift({ name, timeSpent: 0, goal, progress: 0, lastUpdated: new Date().toISOString() });
+                taskInput.value = '';
+                taskGoal.value = '';
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function toggleEditForm(index) {
+            const editForm = document.getElementById(`editForm${index}`);
+            editForm.style.display = editForm.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function saveEdit(index) {
+            const newName = document.getElementById(`editName${index}`).value.trim();
+            const newGoal = parseInt(document.getElementById(`editGoal${index}`).value) || 0;
+            const newProgress = parseInt(document.getElementById(`editProgress${index}`).value) || 0;
+            const newTime = parseInt(document.getElementById(`editTime${index}`).value) || 0;
+            if (newName) {
+                const editedTask = tasks.splice(index, 1)[0];
+                editedTask.name = newName;
+                editedTask.goal = newGoal;
+                editedTask.progress = newProgress;
+                editedTask.timeSpent = newTime;
+                tasks.unshift(editedTask);
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            saveTasks();
+            renderTasks();
+        }
+
+        function incrementProgress(index) {
+            const updatedTask = tasks.splice(index, 1)[0];
+            updatedTask.progress++;
+            tasks.unshift(updatedTask);
+            saveTasks();
+            renderTasks();
+        }
+
+        function incrementTime(index, minutes) {
+            const updatedTask = tasks.splice(index, 1)[0];
+            updatedTask.timeSpent += minutes;
+            tasks.unshift(updatedTask);
+            weeklyProgress.minutes += minutes;
+            saveTasks();
+            renderTasks();
+        }
+
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            localStorage.setItem('weeklyProgress', JSON.stringify(weeklyProgress));
+        }
+
+        function importXLSX(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const json = XLSX.utils.sheet_to_json(worksheet);
+                const newTasks = json.map(row => ({
+                    name: row.Name || '',
+                    goal: parseInt(row.Goal) || 0,
+                    progress: parseInt(row.Progress) || 0,
+                    timeSpent: parseInt(row.TimeSpent) || 0
+                }));
+                tasks = newTasks.concat(tasks);
+                saveTasks();
+                renderTasks();
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function exportXLSX() {
+            const dataToExport = tasks.map(task => ({
+                Name: task.name,
+                Goal: task.goal,
+                Progress: task.progress,
+                TimeSpent: task.timeSpent
+            }));
+            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Tasks');
+            XLSX.writeFile(workbook, 'tasks.xlsx');
+        }
+
+        addTaskButton.addEventListener('click', addTask);
+        taskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addTask();
+        });
+        searchInput.addEventListener('input', renderTasks);
+        csvInput.addEventListener('change', importXLSX);
+
+        function loadTasks() {
+            const savedTasks = localStorage.getItem('tasks');
+            const savedWeeklyProgress = localStorage.getItem('weeklyProgress');
+            const savedLastCelebratedMilestone = localStorage.getItem('lastCelebratedMilestone');
+            const savedLastWeeklyCongrats = localStorage.getItem('lastWeeklyCongrats');
+            if (savedTasks) {
+                tasks = JSON.parse(savedTasks);
+            }
+            if (savedWeeklyProgress) {
+                weeklyProgress = JSON.parse(savedWeeklyProgress);
+                if (shouldResetWeeklyProgress(new Date(), weeklyProgress.startDate)) {
+                    resetWeeklyProgress(new Date());
+                }
+            } else {
+                resetWeeklyProgress(new Date());
+            }
+            if (savedLastCelebratedMilestone) {
+                lastCelebratedMilestone = parseInt(savedLastCelebratedMilestone);
+            }
+            if (savedLastWeeklyCongrats) {
+                lastWeeklyCongrats = JSON.parse(savedLastWeeklyCongrats);
+            }
+            renderTasks();
+        }
+
+        // Call loadTasks() when the page loads
+        window.addEventListener('load', loadTasks);
+    </script>
+</body>
+</html>
